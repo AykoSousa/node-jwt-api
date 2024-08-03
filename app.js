@@ -11,6 +11,38 @@ app.use(express.json());
 // Models
 const User = require('./models/User');
 
+// Routes
+app.get('/', (req, res) => {
+    res.json({ message: 'Hello World!' });
+});
+
+app.get('/user/:id', checkToken, async (req, res) => {
+    const id = req.params.id;
+    const user = await User.findById(id, '-password');
+    if(!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ message: 'Welcome to the dashboard!' });
+})
+
+function checkToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if(!token) {
+        return res.status(401).json({message: "Access denied"})
+    }
+
+    try {
+        const secret = process.env.SECRET;
+        jwt.verify(token, secret);
+        next();
+    } catch (err) {
+        res.status(400).json({message: "Invalid token"})
+    }
+}
+
 app.post('/auth/register', async(req, res) => {
     const {name, email, password, confirmpassword} = req.body;
     if(!name) {
@@ -71,6 +103,22 @@ app.post('/auth/login', async(req, res) => {
     const checkPassword = await bcrypt.compare(password, user.password);
     if(!checkPassword) {
         return res.status(400).json({message: 'Invalid password!'});
+    }
+
+    try {
+        const secret = process.env.SECRET
+        const token = jwt.sign({
+            id: user._id,
+        },
+        secret,
+    )
+    res.status(200).json({
+        message: "Authentication succefully!",
+        token: token
+    })
+    } catch (err) {
+        res.status(500).json({message: "Internal server error!"});
+        console.error(err);
     }
 });
 
