@@ -5,6 +5,16 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 
+// Config JSON response
+app.use(express.json());
+
+app.post('/auth/register', async(req, res) => {
+    const {name, email, password, confirmpassword} = req.body;
+    if(!name) {
+        return res.status(400).json({message: 'Name is required'});
+    }
+});
+
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 
