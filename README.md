@@ -20,24 +20,30 @@ This is a simple project using node and express with the objective of studying a
 - [POST] '/auth/register'
 ```json
 # Example body
+"Name" is required and must be at least 2 characters
+"Email" is required and must be a valid email
+"Password" is required and must be at least 5 characters
     {
-       "name": "string*",
-       "email": "string*",
-       "password": "string*",
-       "confirmpassword": "password*"
+       "name": "John Doe",
+       "email": "john@doe.com",
+       "password": "12345",
+       "confirmpassword": "12345"
     }
 
 # Response
     {
+        "status": 201,
         "message": "User created succefully!"
     }
 ```
 - [POST] '/auth/login'
 ```json
 # Example body
+"Email" is required
+"Password" is required
     {
-        "email": "string*",
-        "password": "string*"
+        "email": "john@doe.com",
+        "password": "12345"
     }
 
 # Response
