@@ -6,13 +6,13 @@ const registerUser = async(req, res) => {
     if(name.length <= 1) {
         return res.status(400).json({
             status: 400,
-            message: 'Name must be at least 1 characters'
+            message: 'Name must be at least 1 characters!'
         });
     }
     if(!name) {
         return res.status(400).json({
             status: 400,
-            message: 'Name is required'
+            message: 'Name is required!'
         });
     }
     if(email) {
@@ -20,46 +20,47 @@ const registerUser = async(req, res) => {
         if(!regex.test(email)) {
             return res.status(400).json({
                 status: 400,
-                message: 'Invalid email'
+                message: 'Invalid email!'
             });
         }
     }
     if(!email) {
         return res.status(400).json({
             status: 400,
-            message: 'Email is required'
+            message: 'Email is required!'
         });
     }
     if(password.length < 5) {
         return res.status(400).json({
             status: 400,
-            message: 'Password must be at least 5 characters'
+            message: 'Password must be at least 5 characters!'
         });
     }
     if(!password) {
         return res.status(400).json({
             status: 400,
-            message: 'Password is required'
+            message: 'Password is required!'
         });
     }
     if(!confirmpassword) {
         return res.status(400).json({
             status: 400,
-            message: 'Password confirmation is required'
+            message: 'Password confirmation is required!'
         });
     }
     if(password !== confirmpassword) {
         return res.status(400).json({
             status: 400,
-            message: 'Passwords do not match'
+            message: 'Passwords do not match!'
         });
     }
 
-    const userExistis = await User.findOne({ email: email});
+    const userExistis = await User.findOne({ email: email });
+
     if(userExistis) {
         return res.status(400).json({
             status: 400,
-            message: 'Email already exists'
+            message: 'Email already exists!'
         });
     }
 
